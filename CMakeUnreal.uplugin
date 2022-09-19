@@ -1,0 +1,17 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "",
+	"FriendlyName": "CMakeUnreal",
+	"Description": "Plugin for CMake projects consumption in Unreal Enigne 5",
+	"EngineVersion":  "ANY_VERSION",
+	"EnabledByDefault": true,
+	"CanContainContent": true,
+	"Modules": [
+		{
+			"Name": "CMakeUnreal",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
