@@ -6,7 +6,8 @@ using UnrealBuildTool;
 public enum SystemArch
 {
     x86,
-    x64
+    x64,
+    Android
 }
 
 public class CMakeProject
@@ -29,7 +30,22 @@ public class CMakeProject
         get { return $@"{_architecture.ToString()}"; }
     }
 
-    private SystemArch _architecture = SystemArch.x64;
+    protected SystemArch _architecture = SystemArch.x64;
+}
+
+public class CMakeAndroidProject
+    : CMakeProject
+{
+    CMakeAndroidProject(string projectName, string projectSource, string androidNdkPath, string androidAbi, string buildType = "\"Release\"", string generator = "Ninja", SystemArch arch = SystemArch.Android)
+        : base(projectName, projectSource, buildType, generator, arch)
+    {
+        android_ndk_path = androidNdkPath;
+        android_abi = androidAbi;
+    }
+
+    public string android_abi { get; set; }
+    public string android_ndk_path { get; set; }
+    public string toolchain { get; set; } = "android.toolchain.cmake";
 }
 
 public class CMakeBuild
@@ -38,7 +54,7 @@ public class CMakeBuild
     {
         _project = proj;
         _buildDir = $@"build-{_project.ProjectName}";
-        _thirdPartyPath =  thirdPartyPath;
+        _thirdPartyPath = thirdPartyPath;
         Build(proj, thirdPartyPath, workingDir);
     }
 
@@ -51,14 +67,11 @@ public class CMakeBuild
     {
         _buildDir = string.Format(_buildDir, proj.ProjectName);
         string buildPath = System.IO.Path.Combine(thirdPartyPath, "Generated", _buildDir);
+        string installPath = buildPath;
 
         int retCode = 0;
-        string buildCommand = CreateCMakeBuildCommand(proj.ProjectSource,
-                                                        buildPath,
-                                                        proj.Generator,
-                                                        proj.Arch,
-                                                        proj.Arch.ToString(),
-                                                        proj.BuildType);
+        //string buildCommand1 = CreateCMakeBuildCommand(buildPath);
+        string buildCommand = CreateCMakeBuildCommand(buildPath, installPath);
         retCode = ExecuteCommandSync(buildCommand, workingDir);
         if (retCode != 0)
             Console.WriteLine($@"Cannot configure CMake project. Exited with code: {retCode}");
@@ -98,19 +111,14 @@ public class CMakeBuild
         return p.ExitCode;
     }
 
-    private string CreateCMakeBuildCommand(string sourceDir,
-                                            string buildDirectory,
-                                            string generator,
-                                            string arch,
-                                            string installPath,
-                                            string buildType)
+    private string CreateCMakeBuildCommand(string buildDirectory, string installPath)
     {
-        string arguments = $@"-G {generator} " +
-                            $@"-S {"\""}{sourceDir}{"\""} " +
+        string arguments = $@"-G {_project.Generator} " +
+                            $@"-S {"\""}{_project.ProjectSource}{"\""} " +
                             $@"-B {"\""}{buildDirectory}{"\""} " +
-                            $@"-A {arch} " +
-                            $@"-T host={arch} " +
-                            $@"-DCMAKE_BUILD_TYPE={buildType} " +
+                            $@"-A {_project.Arch.ToString()} " +
+                            $@"-T host={_project.Arch.ToString()} " +
+                            $@"-DCMAKE_BUILD_TYPE={_project.BuildType} " +
                             $@"-DCMAKE_INSTALL_PREFIX={installPath}" +
                             "-MD";
 

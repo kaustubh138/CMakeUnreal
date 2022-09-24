@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+   <PropertyGroup>
+	    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    </PropertyGroup>
+
+	<ItemGroup>
+    <Compile Remove="CMakeBuildTest\**" />
+    <EmbeddedResource Remove="CMakeBuildTest\**" />
+    <None Remove="CMakeBuildTest\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Source\CMakeUnreal.Build.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="CMakeUnreal.uplugin" />
+    <None Remove="configure.py" />
+  </ItemGroup>
+
+</Project>
