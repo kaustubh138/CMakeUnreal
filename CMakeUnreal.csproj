@@ -14,8 +14,11 @@
 
 	<ItemGroup>
     <Compile Remove="CMakeBuildTest\**" />
+    <Compile Remove="DummyCMakeProject\**" />
     <EmbeddedResource Remove="CMakeBuildTest\**" />
+    <EmbeddedResource Remove="DummyCMakeProject\**" />
     <None Remove="CMakeBuildTest\**" />
+    <None Remove="DummyCMakeProject\**" />
   </ItemGroup>
 
   <ItemGroup>
