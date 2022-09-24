@@ -23,11 +23,17 @@
 
   <ItemGroup>
     <Compile Remove="Source\CMakeUnreal.Build.cs" />
+    <Compile Remove="Source\ModuleRules.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="amalgamate.py" />
+    <None Remove="CMakeUnreal.cpp" />
+    <None Remove="CMakeUnreal.hpp" />
     <None Remove="CMakeUnreal.uplugin" />
     <None Remove="configure.py" />
+    <None Remove="Source\CMakeUnreal.cpp" />
+    <None Remove="Source\CMakeUnreal.hpp" />
   </ItemGroup>
 
 </Project>
